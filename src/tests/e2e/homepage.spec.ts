@@ -1,21 +1,14 @@
 import { test, expect } from '@playwright/test';
+import { HomePage } from '../../pages/home.page';
 
 test.describe('Homepage Smoke Tests', () => {
-  test('should load a simple local HTML page', async ({ page }) => {
-    await page.setContent(`
-      <html>
-        <head>
-          <title>QA Automation Framework</title>
-        </head>
-        <body>
-          <h1>Playwright AI SDET Framework</h1>
-          <a href="/docs">Docs</a>
-        </body>
-      </html>
-    `);
+  test('should load a simple local HTML page using Page Object Model', async ({ page }) => {
+    const homePage = new HomePage(page);
+
+    await homePage.loadMockHomePage();
 
     await expect(page).toHaveTitle('QA Automation Framework');
-    await expect(page.getByRole('heading', { name: 'Playwright AI SDET Framework' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Docs' })).toBeVisible();
+    await expect(homePage.mainHeading).toBeVisible();
+    await expect(homePage.docsLink).toBeVisible();
   });
 });
